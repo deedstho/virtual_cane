@@ -33,8 +33,13 @@
 // 16 is good - 1 second buzz
 // 52 - series of pulses
 
+#define BUZZ_PER_SEC (2)	// buzzes per sec
 
-// ** PRIVATE ** //
+static uint32_t sys_clk_freq;
+
+// forward declaration
+void haptic_standby_mode(void);
+void haptic_playback_mode(void);
 
 
 // Put driver in active mode with intensity of 0
@@ -84,8 +89,6 @@ void haptic_trigger_waveform(void)
     uint8_t in_buff[1];
     uint8_t out_buff[2];
 
-    // Unidirectional input
-    // this only needs to be done on startup but I didn't want a seperate init() function
     // Real Time Playback mode
     Chip_I2C_MasterCmdRead(I2C0, DRIVER_ADDR, GO_REG_ADDR, in_buff, sizeof(in_buff));
     in_buff[0] |= GO_MASK;
@@ -100,15 +103,21 @@ void haptic_trigger_waveform(void)
 
 void haptic_init()
 {
+	haptic_calibrate();
+
+	volatile int i = 0;
+	for (i = 0; i < 4000000; ++i){}
+
     haptic_set_waveform_queue(); // move to startup for quicker execution
     haptic_select_waveform_library(); // move to startup for quicker execution
+    //haptic_intensity(0xFF); // set playback register to full
 }
 
 
 // Sends a haptic notification to the user
 void haptic_notify(void)
 {
-    haptic_trigger_mode(); 
+    haptic_trigger_mode();
     haptic_trigger_waveform();
 }
 
