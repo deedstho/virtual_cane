@@ -3,6 +3,7 @@
 #include "i2c.h"
 #include "haptic.h"
 #include "pwm.h"
+#include "lidar.h"
 
 #define TICKRATE_HZ1 (50)	/* 10 ticks per second */
 
@@ -12,19 +13,27 @@
  */
 void SysTick_Handler(void)
 {
-	static uint16_t distance = 0;
-	static unsigned int i = 0;
-	++i;
-	Board_LED_Toggle(0);
+	while(check_status()){}
 
-	++distance;
-	if (distance > 150) distance = 0;
+	uint16_t distance;
+	distance = read_data();
+
+//	static uint16_t distance = 0;
+
+	Board_LED_Toggle(0);
+//
+//	++distance;
+//	if (distance > 150) distance = 0;
 	distance_to_sound(distance);
 
+	static unsigned int i = 0;
+	++i;
 	if (i % 100 == 0)
 	{
 		haptic_notify();
 	}
+
+	calibrate_lidar();
 }
 
 /**
