@@ -4,6 +4,7 @@
 #include "haptic.h"
 #include "pwm.h"
 #include "lidar.h"
+//#include "serial.h"
 
 #define TICKRATE_HZ1 (50)	/* 10 ticks per second */
 
@@ -17,6 +18,9 @@ void SysTick_Handler(void)
 
 	uint16_t distance;
 	distance = read_data();
+
+	//Serial_printNumber(0,(int)distance,DEC);
+	//Serial_println(0);
 
 //	static uint16_t distance = 0;
 
@@ -42,6 +46,10 @@ void SysTick_Handler(void)
  */
 int main(void)
 {
+
+	//Serial_begin(0, 57600);
+
+
 	/* Generic Initialization */
 	SystemCoreClockUpdate();
 	Board_Init();
@@ -51,8 +59,6 @@ int main(void)
 
 	/* Enable and setup SysTick Timer at a periodic rate */
 	SysTick_Config(SystemCoreClock / TICKRATE_HZ1);
-
-
 
 
 	/* LEDs toggle in interrupt handlers */

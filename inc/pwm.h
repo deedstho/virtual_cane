@@ -56,11 +56,13 @@ void distance_to_sound(uint16_t in_distance)
     //uint32_t period = 239808, width = 119904;
     //10393/454x+693859/454;
     //5987/247x-14009/247
+    //5987/247/4x-14009/247/4
+    // = 6x - 14
 
     // make sure we don't have a value that will scale to negative - bad behavior unsigned
     if (in_distance < 3) in_distance = 3;
 
-    uint32_t period =  24 * ((uint32_t)in_distance) - 57;
+    uint32_t period =  6 * ((uint32_t)in_distance) - 14;
     uint32_t width = period / 2;
     pTMR->MR0 = period;
     pTMR->MR1 = width;
