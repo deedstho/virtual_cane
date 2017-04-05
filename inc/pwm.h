@@ -52,17 +52,10 @@ void distance_to_sound(uint16_t in_distance)
     pTMR->PR  =  prescale;
     pTMR->MCR = (1<<SBIT_PWMMR0R);  /*Reset on PWMMR0, reset TC if it matches MR0 */
 
-    //uint32_t period = 1597, width = 799;
-    //uint32_t period = 239808, width = 119904;
-    //10393/454x+693859/454;
-    //5987/247x-14009/247
-    //5987/247/4x-14009/247/4
-    // = 6x - 14
-
     // make sure we don't have a value that will scale to negative - bad behavior unsigned
-    if (in_distance < 3) in_distance = 3;
+//    if (in_distance < 2) in_distance = 2;
 
-    uint32_t period =  6 * ((uint32_t)in_distance) - 14;
+    uint32_t period =  3 * ((uint32_t)in_distance) + 16;
     uint32_t width = period / 2;
     pTMR->MR0 = period;
     pTMR->MR1 = width;

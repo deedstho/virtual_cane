@@ -16,25 +16,15 @@ void SysTick_Handler(void)
 {
 	while(check_status()){}
 
+	Board_LED_Toggle(0);
+
 	uint16_t distance;
 	distance = read_data();
+	distance_to_sound( distance );
 
-	//Serial_printNumber(0,(int)distance,DEC);
-	//Serial_println(0);
-
-//	static uint16_t distance = 0;
-
-	Board_LED_Toggle(0);
-//
-//	++distance;
-//	if (distance > 150) distance = 0;
-	distance_to_sound(distance);
-
-	static unsigned int i = 0;
-	++i;
-	if (i % 100 == 0)
+	if (distance < 92) //(3 feet)
 	{
-		haptic_notify();
+		//haptic_notify();
 	}
 
 	calibrate_lidar();
@@ -55,7 +45,7 @@ int main(void)
 	Board_Init();
 
 	i2c_app_init(I2C0, SPEED_100KHZ);
-	haptic_init();
+	//haptic_init();
 
 	/* Enable and setup SysTick Timer at a periodic rate */
 	SysTick_Config(SystemCoreClock / TICKRATE_HZ1);
