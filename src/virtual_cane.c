@@ -14,12 +14,14 @@
  */
 void SysTick_Handler(void)
 {
-	while(check_status()){}
+	// wait until lidar is ready
+	while( lidar_status() ){}
 
 	Board_LED_Toggle(0);
 
+	// read lidar distance
 	uint16_t distance;
-	distance = read_data();
+	distance = lidar_read();
 	distance_to_sound( distance );
 
 	if (distance < 92) //(3 feet)
@@ -27,7 +29,9 @@ void SysTick_Handler(void)
 		//haptic_notify();
 	}
 
-	calibrate_lidar();
+	//printf("%hu\n", distance);
+
+	lidar_request();
 }
 
 /**

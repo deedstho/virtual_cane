@@ -54,7 +54,7 @@ void wake_lidar(void){
 	Chip_I2C_MasterSend(I2C0, TARGET_ADD, out_buff, sizeof(out_buff));
 }*/
 
-void calibrate_lidar(void){
+void lidar_request(void){
 
 	uint8_t out_buff[2];
 	uint8_t set[2];
@@ -69,17 +69,17 @@ void calibrate_lidar(void){
 	Chip_I2C_MasterSend(I2C0, TARGET_ADD, set, sizeof(set));
 }
 
-uint16_t read_data(void){
+uint16_t lidar_read(void){
 
 	uint8_t out_buff1[1];
-	uint8_t out_buff2[1];
+	uint8_t out_buff0[1];
 	uint8_t in_buff[2];
 	out_buff1[0] = FULL_DELAY_HIGH_ADD;
-	out_buff2[0] = FULL_DELAY_LOW_ADD;
+	out_buff0[0] = FULL_DELAY_LOW_ADD;
 
 	Chip_I2C_MasterSend(I2C0, TARGET_ADD, out_buff1, sizeof(out_buff1));
 	Chip_I2C_MasterRead(I2C0, TARGET_ADD, &in_buff[1], sizeof(in_buff[1]));
-	Chip_I2C_MasterSend(I2C0, TARGET_ADD, out_buff2, sizeof(out_buff2));
+	Chip_I2C_MasterSend(I2C0, TARGET_ADD, out_buff0, sizeof(out_buff0));
 	Chip_I2C_MasterRead(I2C0, TARGET_ADD, &in_buff[0], sizeof(in_buff[0]));
 
 	uint16_t result;
@@ -89,7 +89,7 @@ uint16_t read_data(void){
 	return result;
 }
 
-int check_status(void){
+int lidar_status(void){
 
 	uint8_t in_buff[1];
 	in_buff[0] = STATUS_ADD;
