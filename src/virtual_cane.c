@@ -32,6 +32,7 @@ void SysTick_Handler(void)
 	// read lidar distance
 	uint16_t distance;
 	distance = lidar_read();
+	printf("%i\n",distance);
 
 	// *DEBUG* print distance to uart
 	//printf("%i\n", distance);
