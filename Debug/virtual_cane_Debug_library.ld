@@ -5,10 +5,11 @@
  * Generated linker script file for LPC1769
  * Created from library.ldt by FMCreateLinkLibraries
  * Using Freemarker v2.3.23
- * LPCXpresso v8.2.2 [Build 650] [2016-09-09]  on Apr 7, 2017 12:54:49 PM
+ * LPCXpresso v8.2.2 [Build 650] [2016-09-09]  on Apr 12, 2017 7:11:12 PM
  */
 
 GROUP (
+  libcr_semihost.a
   libcr_c.a
   libcr_eabihelpers.a
 )

@@ -25,7 +25,7 @@
 #define PWM_4          6 //P2_3 (6-7 Bits of PINSEL4)
 
 
-static volatile LPC_PWM_T * pTMR = (LPC_PWM_T*) LPC_PWM1;
+static LPC_PWM_T * pTMR = (LPC_PWM_T*) LPC_PWM1;
 
 // ** PUBLIC ** //
 

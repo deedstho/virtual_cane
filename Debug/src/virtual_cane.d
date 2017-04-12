@@ -46,7 +46,8 @@ src/virtual_cane.o src/virtual_cane.d: ../src/virtual_cane.c \
  /Users/tomdeeds/Documents/LPCXpresso_8.2.2/workspace/virtual_cane/inc/haptic.h \
  /Users/tomdeeds/Documents/LPCXpresso_8.2.2/workspace/virtual_cane/inc/i2c.h \
  /Users/tomdeeds/Documents/LPCXpresso_8.2.2/workspace/virtual_cane/inc/pwm.h \
- /Users/tomdeeds/Documents/LPCXpresso_8.2.2/workspace/virtual_cane/inc/lidar.h
+ /Users/tomdeeds/Documents/LPCXpresso_8.2.2/workspace/virtual_cane/inc/lidar.h \
+ /Users/tomdeeds/Documents/LPCXpresso_8.2.2/workspace/virtual_cane/inc/accelerometer.h
 
 /Users/tomdeeds/Documents/LPCXpresso_8.2.2/workspace/lpc_board_nxp_lpcxpresso_1769/inc/board.h:
 
@@ -143,3 +144,5 @@ src/virtual_cane.o src/virtual_cane.d: ../src/virtual_cane.c \
 /Users/tomdeeds/Documents/LPCXpresso_8.2.2/workspace/virtual_cane/inc/pwm.h:
 
 /Users/tomdeeds/Documents/LPCXpresso_8.2.2/workspace/virtual_cane/inc/lidar.h:
+
+/Users/tomdeeds/Documents/LPCXpresso_8.2.2/workspace/virtual_cane/inc/accelerometer.h:
