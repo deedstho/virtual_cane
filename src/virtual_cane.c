@@ -101,8 +101,6 @@ void EINT3_IRQHandler(void)
 		// Disable Systick
 		//SysTick->CTRL = SysTick_CTRL_CLKSOURCE_Msk | SysTick_CTRL_ENABLE_Msk;
 
-		pwm_disabled = 1;
-
 		//Chip_GPIO_SetPinState(LPC_GPIO, 0, 18, 1);// DEBUG
 		haptic_standby_mode();
 		lidar_sleep();
@@ -117,14 +115,13 @@ void EINT3_IRQHandler(void)
 		//Chip_GPIO_SetPinState(LPC_GPIO, 0, 18, 0);// DEBUG
 
 		lidar_wake();
-		haptic_playback_mode();
-		// PWM wake just happens //
 
 		// delay for lidar power up
 		volatile int j = 0;
 		for(j = 0; j < 10000000; ++j);
 
-		pwm_disabled = 0;
+		haptic_playback_mode();
+		// PWM wake just happens //
 
 		// Enable Systick
 		SysTick_Config(SystemCoreClock / TICKRATE_HZ1);
@@ -203,10 +200,7 @@ void SysTick_Handler(void)
 	//printf("%i\n", distance);
 
 	// output pitch based on distance
-	if (!pwm_disabled)
-	{
-		distance_to_sound( distance );
-	}
+	distance_to_sound( distance );
 
 
 	// output vibration amplitude based on distance (correct for lidar distance offset)
@@ -244,6 +238,10 @@ int main(void)
 	/* Generic Initialization */
 	SystemCoreClockUpdate();
 	Board_Init();
+
+	// initialize lidar (power enable pin)
+	lidar_init();
+	lidar_wake();
 
 	// initialize i2c
 	i2c_app_init(I2C0, SPEED_100KHZ);
