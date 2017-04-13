@@ -13,7 +13,7 @@
 #define SCOPE_PORT	0
 #define SCOPE_PIN	9
 
-#define TICKRATE_HZ1 (100)	/* 10 ticks per second */
+#define TICKRATE_HZ1 (50)	/* 10 ticks per second */
 
 static uint8_t haptic_sleep = 0;
 static uint8_t bool_service_EINT3 = 0;
@@ -113,6 +113,9 @@ void EINT3_IRQHandler(void)
 
 		lidar_wake();
 		haptic_playback_mode();
+
+		volatile int j = 0;
+		for(j = 0; j < 10000000; ++j);
 
 		// Enable Systick
 		SysTick_Config(SystemCoreClock / TICKRATE_HZ1);
