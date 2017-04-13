@@ -18,6 +18,7 @@
 static uint8_t haptic_sleep = 0;
 static uint8_t bool_service_EINT3 = 0;
 static uint8_t bool_service_systick = 0;
+static uint8_t pwm_disabled = 0;
 
 void initialize_sleep_interrupt(void){
 	uint32_t pin = 0x00020000;	//H[12] & P0[17]
@@ -86,6 +87,8 @@ void EINT3_IRQHandler(void)
 	// Disable Systick
 	SysTick->CTRL = SysTick_CTRL_CLKSOURCE_Msk | SysTick_CTRL_ENABLE_Msk;
 
+	//pwm_sleep();
+
 	// clear pending interrupts from this source
 	NVIC_ClearPendingIRQ(EINT3_IRQn);
 
@@ -98,11 +101,13 @@ void EINT3_IRQHandler(void)
 		// Disable Systick
 		//SysTick->CTRL = SysTick_CTRL_CLKSOURCE_Msk | SysTick_CTRL_ENABLE_Msk;
 
+		pwm_disabled = 1;
+
 		//Chip_GPIO_SetPinState(LPC_GPIO, 0, 18, 1);// DEBUG
 		haptic_standby_mode();
 		lidar_sleep();
-
-		haptic_sleep = 1;
+		pwm_sleep();
+		//distance_to_sound(0x0FFFFFFF);
 	}
 
 	// wake up
@@ -113,15 +118,17 @@ void EINT3_IRQHandler(void)
 
 		lidar_wake();
 		haptic_playback_mode();
+		// PWM wake just happens //
 
+		// delay for lidar power up
 		volatile int j = 0;
 		for(j = 0; j < 10000000; ++j);
 
+		pwm_disabled = 0;
+
 		// Enable Systick
 		SysTick_Config(SystemCoreClock / TICKRATE_HZ1);
-		SysTick->CTRL = SysTick_CTRL_CLKSOURCE_Msk | SysTick_CTRL_TICKINT_Msk | SysTick_CTRL_ENABLE_Msk;
-
-		haptic_sleep = 0;
+		//SysTick->CTRL = SysTick_CTRL_CLKSOURCE_Msk | SysTick_CTRL_TICKINT_Msk | SysTick_CTRL_ENABLE_Msk;
 	}
 }
 
@@ -196,7 +203,11 @@ void SysTick_Handler(void)
 	//printf("%i\n", distance);
 
 	// output pitch based on distance
-	distance_to_sound( distance );
+	if (!pwm_disabled)
+	{
+		distance_to_sound( distance );
+	}
+
 
 	// output vibration amplitude based on distance (correct for lidar distance offset)
 	if (distance < 255) //(3 feet)

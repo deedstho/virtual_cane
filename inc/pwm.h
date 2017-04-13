@@ -25,7 +25,7 @@
 #define PWM_4          6 //P2_3 (6-7 Bits of PINSEL4)
 
 
-static LPC_PWM_T * pTMR = (LPC_PWM_T*) LPC_PWM1;
+volatile static LPC_PWM_T * pTMR = (LPC_PWM_T*) LPC_PWM1;
 
 // ** PUBLIC ** //
 
@@ -60,9 +60,9 @@ void distance_to_sound(uint16_t in_distance)
     uint32_t width = period / 2;
     pTMR->MR0 = period;
     pTMR->MR1 = width;
-    pTMR->MR2 = width;
-    pTMR->MR3 = width;
-    pTMR->MR4 = width;
+    //pTMR->MR2 = width;
+    //pTMR->MR3 = width;
+    //pTMR->MR4 = width;
     /* Trigger the latch Enable Bits to load the new Match Values */
     pTMR->LER = (1<<SBIT_LEN0) | (1<<SBIT_LEN1) | (1<<SBIT_LEN2) | (1<<SBIT_LEN3) | (1<<SBIT_LEN4);
 
@@ -70,9 +70,11 @@ void distance_to_sound(uint16_t in_distance)
     pTMR->PCR = (1<<SBIT_PWMENA1) | (1<<SBIT_PWMENA2) | (1<<SBIT_PWMENA3) | (1<<SBIT_PWMENA4);
 }
 
-void pwm_sleep(uint8_t duty)
+void pwm_sleep()
 {
-	// TODO
+	//Chip_PWM_DeInit(pTMR);
+	pTMR->TCR &= ~(1<<SBIT_CNTEN);
+	pTMR->TCR &= ~(1<<SBIT_PWMEN);
 }
 
 
