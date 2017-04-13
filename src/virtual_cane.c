@@ -13,7 +13,7 @@
 #define SCOPE_PORT	0
 #define SCOPE_PIN	9
 
-#define TICKRATE_HZ1 (10)	/* 10 ticks per second */
+#define TICKRATE_HZ1 (100)	/* 10 ticks per second */
 
 static uint8_t haptic_sleep = 0;
 static uint8_t bool_service_EINT3 = 0;
@@ -115,6 +115,7 @@ void EINT3_IRQHandler(void)
 		haptic_playback_mode();
 
 		// Enable Systick
+		SysTick_Config(SystemCoreClock / TICKRATE_HZ1);
 		SysTick->CTRL = SysTick_CTRL_CLKSOURCE_Msk | SysTick_CTRL_TICKINT_Msk | SysTick_CTRL_ENABLE_Msk;
 
 		haptic_sleep = 0;
