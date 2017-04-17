@@ -22,7 +22,7 @@
 #define CTRL_REG3_VAL				0x40
 #define CTRL_REG4_VAL				0x88	//Full scale = +/-2g with BDU enabled and High Resolution on
 #define INT1_CFG_VAL				0x95
-#define INT1_THS_VAL				0x08	//+/-125 mg of gravity for threshold
+#define INT1_THS_VAL				0x02	//+/-125 mg of gravity for threshold
 #define INT1_DUR_VAL				0x32	//10 sec duration to trigger sleep mode
 
 void accel_enable_interrupt_output(void) {
