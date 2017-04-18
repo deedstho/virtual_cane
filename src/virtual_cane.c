@@ -13,6 +13,14 @@
 #define SCOPE_PORT	0
 #define SCOPE_PIN	9
 
+#define C_note		458
+#define Bb_note		514
+#define Ab_note		577
+#define QUIET_BIG	500000
+#define WHOLE_NOTE	6000000
+#define HALF_NOTE	3000000
+
+
 #define TICKRATE_HZ1 (50)	/* 10 ticks per second */
 
 static uint8_t haptic_sleep = 0;
@@ -69,13 +77,40 @@ void EINT3_IRQHandler(void)
 
 		//Chip_GPIO_SetPinState(LPC_GPIO, 0, 18, 0);// DEBUG
 
+		// Wake up LIDAR
 		lidar_wake();
 
-		// delay for lidar power up
+		// Play The Victors
 		volatile int j = 0;
-		for(j = 0; j < 15000000; ++j);
+		// C (whole note)
+		direct_output(C_note);
+		for(j = 0; j < WHOLE_NOTE; ++j){}
+		// Ab
+		direct_output(Ab_note);
+		for(j = 0; j < HALF_NOTE; ++j){}
+		// Bb
+		direct_output(Bb_note);
+		for(j = 0; j < HALF_NOTE; ++j){}
+		// C
+		direct_output(C_note);
+		for(j = 0; j < HALF_NOTE; ++j){}
+		// Ab
+		direct_output(Ab_note);
+		for(j = 0; j < HALF_NOTE; ++j){}
+		// Bb
+		direct_output(Bb_note);
+		for(j = 0; j < HALF_NOTE; ++j){}
+		// C
+		direct_output(C_note);
+		for(j = 0; j < HALF_NOTE; ++j){}
 
+		// wait
+		direct_output(QUIET_BIG);
+		for(j = 0; j < HALF_NOTE; ++j){}
+
+		// wake up motor driver
 		haptic_playback_mode();
+
 		// PWM wake just happens //
 
 		// Enable Systick

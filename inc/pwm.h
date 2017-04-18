@@ -64,6 +64,39 @@ void distance_to_sound(uint16_t in_distance)
     pTMR->PCR = (1<<SBIT_PWMENA1);
 }
 
+void direct_output(uint32_t period)
+{
+	// reset pwm counter
+    Chip_PWM_Reset(pTMR);
+
+    // Set pins to pwm ONLY MATTERS FIRST TIME
+    LPC_IOCON->PINSEL[4] = (1<<PWM_1);
+
+    // Enable counters ONLY MATTERS FIRST TIME
+    pTMR->TCR |= (1<<CNT_ENA_SHIFT);
+    pTMR->TCR |= (1<<PWM_ENA_SHIFT);
+
+    // Set prescale value to x100 ONLY MATTERS FIRST TIME
+    uint32_t prescale = 99;
+    pTMR->PR  =  prescale;
+
+    // Timer resets on MR0
+    pTMR->MCR = (1<<RST_ON_MR0_SHIFT);
+
+    uint32_t width = period / 2;
+
+    // Set match register values
+    pTMR->MR0 = period;
+    pTMR->MR1 = width;
+
+    // Load new match values
+    pTMR->LER |= (1<<MR0_ENA_SHIFT);
+	pTMR->LER |= (1<<MR1_ENA_SHIFT);
+
+    // Enable pwm output on pwm pin 1
+    pTMR->PCR = (1<<SBIT_PWMENA1);
+}
+
 void pwm_sleep()
 {
 	//Chip_PWM_DeInit(pTMR);
