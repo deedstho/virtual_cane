@@ -71,9 +71,24 @@ void EINT3_IRQHandler(void)
 
 		lidar_wake();
 
-		// delay for lidar power up
-		volatile int j = 0;
-		for(j = 0; j < 15000000; ++j);
+		//delay for lidar power up
+
+		volatile int j = 0, i = 0;
+		for(j = 0; j < 5000000; ++j)
+		{
+			++i;
+
+			if (i % 500000 == 0)
+			{
+				distance_to_sound( 500 - i / 10000 );
+			}
+
+			if ((j%5000000) == 0)
+			{
+				i = 0;
+			}
+
+		}
 
 		haptic_playback_mode();
 		// PWM wake just happens //
