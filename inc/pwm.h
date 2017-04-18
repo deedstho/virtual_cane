@@ -49,7 +49,7 @@ void distance_to_sound(uint16_t in_distance)
     if (in_distance < 23) in_distance = 23;
 
     // Calculate pulse width and period
-    uint32_t period =  2 * ((uint32_t)in_distance) + 16 - 2*20;
+    uint32_t period =  2 * ((uint32_t)in_distance) + 16 - 2*20 + 10;
     uint32_t width = period / 2;
 
     // Set match register values
