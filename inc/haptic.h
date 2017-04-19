@@ -35,11 +35,10 @@
 
 #define BUZZ_PER_SEC (2)	// buzzes per sec
 
-static uint32_t sys_clk_freq;
-
 // forward declaration
 void haptic_standby_mode(void);
 void haptic_playback_mode(void);
+void haptic_calibrate(void);
 
 
 // Put driver in active mode with intensity of 0
@@ -108,8 +107,8 @@ void haptic_init()
 	volatile int i = 0;
 	for (i = 0; i < 4000000; ++i){}
 
-    haptic_set_waveform_queue(); // move to startup for quicker execution
-    haptic_select_waveform_library(); // move to startup for quicker execution
+    //haptic_set_waveform_queue(); // move to startup for quicker execution
+    //haptic_select_waveform_library(); // move to startup for quicker execution
     //haptic_intensity(0xFF); // set playback register to full
 }
 

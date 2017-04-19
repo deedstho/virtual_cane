@@ -103,7 +103,7 @@ static void i2c_app_init(I2C_ID_T id, int speed)
 	Chip_I2C_SetClockRate(id, speed);
 
 	/* Set default mode to interrupt (vs. polling. apparently polling is simpler but slower) */
-	i2c_set_mode(id, 0);
+	i2c_set_mode(id, 1);
 }
 
 #endif /* I2C_H_ */

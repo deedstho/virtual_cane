@@ -33,42 +33,49 @@
 #define POWER_ON					0x00
 #define SIG_COUNT_VAL				0x45
 
-// Buffer
+// Masks
 #define MASK					0b00000001
 
-/*void sleep_lidar(void){
-	uint8_t out_buff[2];
+// Power Enable Pin and Pad H[23]
+#define PWR_EN_PORT				0
+#define PWR_EN_PIN				21
 
-	out_buff[0] = POWER_ADD;
-	out_buff[1] = POWER_OFF;
+// Boolean
+#define LOW						0
+#define HIGH					1
 
-	Chip_I2C_MasterSend(I2C0, TARGET_ADD, out_buff, sizeof(out_buff));
+
+// Wake up LIDAR
+void lidar_sleep(void)
+{
+	// set power enable low
+	Chip_GPIO_SetPinState(LPC_GPIO, PWR_EN_PORT, PWR_EN_PIN, LOW);
 }
 
-void wake_lidar(void){
-	uint8_t out_buff[2];
+// Put LIDAR to sleep
+void lidar_wake(void)
+{
+	// set power enable high
+	Chip_GPIO_SetPinState(LPC_GPIO, PWR_EN_PORT, PWR_EN_PIN, HIGH);
+}
 
-	out_buff[0] = POWER_ADD;
-	out_buff[1] = POWER_ON;
+// Initialize LIDAR
+void lidar_init(void)
+{
+	Chip_GPIO_SetPinDIROutput(LPC_GPIO, PWR_EN_PORT, PWR_EN_PIN);
+}
 
-	Chip_I2C_MasterSend(I2C0, TARGET_ADD, out_buff, sizeof(out_buff));
-}*/
-
+// Request a measurement from LIDAR
 void lidar_request(void){
-
-	uint8_t out_buff[2];
 	uint8_t set[2];
-
-	out_buff[0] = ACQ_COMMAND_ADD;
-	out_buff[1] = ACQ_COMMAND_RESET;
 
 	set[0] = ACQ_COMMAND_ADD;
 	set[1] = ACQ_COMMAND_NON;
 
-	//Chip_I2C_MasterSend(I2C0, TARGET_ADD, out_buff, sizeof(out_buff));
 	Chip_I2C_MasterSend(I2C0, TARGET_ADD, set, sizeof(set));
 }
 
+// Read a measurement from LIDAR
 uint16_t lidar_read(void){
 
 	uint8_t out_buff1[1];
@@ -89,6 +96,7 @@ uint16_t lidar_read(void){
 	return result;
 }
 
+// Check whether LIDAR is done with measurement
 int lidar_status(void){
 
 	uint8_t in_buff[1];
